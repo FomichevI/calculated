@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xml>
+	<rus>
+		<text name="Sound" transcription="Звук"/>
+		<text name="Music" transcription="Музыка"/>
+		<text name="Language" transcription="Язык"/>
+		<text name="Theme" transcription="Тема"/>
+		<text name="Menu" transcription="Меню"/>
+		<text name="Download" transcription="Загрузить"/>
+		<text name="Update" transcription="Доступна новая версия игры!"/>
+		<text name="Score" transcription="Счет"/>
+		<text name="Rules" transcription="Пройдите лабиринт таким образом, чтобы итоговое число совпадало с числом на финишной клетке"/>
+		<text name="Continue" transcription="Далее"/>
+		<text name="Win" transcription="Поздравляем!\nВы прошли уровень!"/>
+		<text name="Hint" transcription="Хотите просмотреть короткое видео, чтобы получить подсказку?"/>
+		<text name="Yes" transcription="Да"/>
+		<text name="No" transcription="Нет"/>
+		<text name="Wait" transcription="Реклама еще не загрузилась. Подождите немного"/>
+	</rus>	
+	<eng>
+		<text name="Sound" transcription="Sound"/>
+		<text name="Music" transcription="Music"/>
+		<text name="Language" transcription="Language"/>
+		<text name="Theme" transcription="Theme"/>
+		<text name="Menu" transcription="Menu"/>
+		<text name="Download" transcription="Download"/>
+		<text name="Update" transcription="A new version of the game is available!"/>
+		<text name="Score" transcription="Score"/>
+		<text name="Rules" transcription="Complete the maze so that your final score is equal to the number on the finish square"/>
+		<text name="Continue" transcription="Resume"/>
+		<text name="Win" transcription="Congratulations!\nYou complete this level!"/>
+		<text name="Hint" transcription="Want to watch a short video to get a hint?"/>
+		<text name="Yes" transcription="Yes"/>
+		<text name="No" transcription="No"/>
+		<text name="Wait" transcription="The video hasn't loaded yet. Please wait a bit"/>
+	</eng>
+</xml>
