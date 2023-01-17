@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -30,7 +29,7 @@ public class ThemeChanger : MonoBehaviour
         _additionalBgTheme2Col = new Color(0, 190 / 255f, 230 / 255f);
         _additionalBgTheme3Col = _additionalBgTheme1Col;
 
-        SetTheme(GetComponent<SaveController>().GetTheme());
+        SetTheme(SaveController.S.GetTheme());
     }
 
     public void SetTheme(int theme)
@@ -68,6 +67,5 @@ public class ThemeChanger : MonoBehaviour
                     break;
             }
         }
-
     }
 }

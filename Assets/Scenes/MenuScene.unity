@@ -1761,7 +1761,6 @@ GameObject:
   - component: {fileID: 519420034}
   - component: {fileID: 519420035}
   - component: {fileID: 519420036}
-  - component: {fileID: 519420037}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1922,18 +1921,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0b0e7dfce4f1c6449bb0ae62e22b731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &519420037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c4dac4b0582a9149b146d357d4ee596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &535416318
@@ -4777,10 +4764,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9b6c1a9ad1f8540bcc3bbac59b71a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 0
-  mainText: {fileID: 1762554218}
-  addedText: {fileID: 338296107}
-  centerImg: {fileID: 0}
+  _mainText: {fileID: 338296107}
+  _addedText: {fileID: 1762554218}
+  _centerImg: {fileID: 1125949554}
 --- !u!1 &1126018747
 GameObject:
   m_ObjectHideFlags: 0
@@ -5649,8 +5635,6 @@ GameObject:
   - component: {fileID: 1315472777}
   - component: {fileID: 1315472776}
   - component: {fileID: 1315472775}
-  - component: {fileID: 1315472778}
-  - component: {fileID: 1315472779}
   m_Layer: 0
   m_Name: NonDestoyed
   m_TagString: Untagged
@@ -5877,37 +5861,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 881329343c3775c458888622c0ea06a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClips:
-  - {fileID: 8300000, guid: 9a53de6bcf2584a4380b61fef815db2c, type: 3}
-  - {fileID: 8300000, guid: c7d7ecbdf8fc28947847e7d4eaca9876, type: 3}
-  - {fileID: 8300000, guid: 8a1bd377004ee594aa6da44e70a90578, type: 3}
-  - {fileID: 8300000, guid: 8e9ad3412728d5d4ab16b796af8ea382, type: 3}
-  musicAS: {fileID: 1315472776}
-  clickAS: {fileID: 1315472775}
---- !u!114 &1315472778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1315472773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fe578c9e19e46f4897686ad21ecc63b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1315472779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1315472773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4f71885b6ee9da46a2aa79a2ff1b987, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _clickAc: {fileID: 8300000, guid: 9a53de6bcf2584a4380b61fef815db2c, type: 3}
+  _connectAc: {fileID: 8300000, guid: c7d7ecbdf8fc28947847e7d4eaca9876, type: 3}
+  _correctAc: {fileID: 8300000, guid: 8a1bd377004ee594aa6da44e70a90578, type: 3}
+  _incorrectAc: {fileID: 8300000, guid: 8e9ad3412728d5d4ab16b796af8ea382, type: 3}
+  _musicAS: {fileID: 1315472776}
+  _clickAS: {fileID: 1315472775}
 --- !u!1 &1316022669
 GameObject:
   m_ObjectHideFlags: 0

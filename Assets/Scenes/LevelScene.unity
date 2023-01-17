@@ -1487,22 +1487,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb6117283e633145bff1214cc49d6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlaying: 1
-  currentLvl: 2
-  mainCounterText: {fileID: 861856158}
-  supportCounterText: {fileID: 648781253}
-  canvas: {fileID: 580778159}
-  bGTrans: {fileID: 455710126}
-  counterAnimator: {fileID: 0}
-  startPrefab: {fileID: 4188855129112016817, guid: 6a55034f79f3417499f66d1cb108d8ef,
+  IsPlaying: 1
+  _mainCounterText: {fileID: 861856158}
+  _supportCounterText: {fileID: 648781253}
+  _panelTrans: {fileID: 455710126}
+  _startPrefab: {fileID: 4188855129112016817, guid: 6a55034f79f3417499f66d1cb108d8ef,
     type: 3}
-  finishPrefab: {fileID: 1315799986971918800, guid: 1a5bda8d0e262f848b452f60e09180a3,
+  _finishPrefab: {fileID: 1315799986971918800, guid: 1a5bda8d0e262f848b452f60e09180a3,
     type: 3}
-  rockPrefab: {fileID: 7982885264410136940, guid: e68aa4d7aa5c66d4cb97c488c04dae65,
+  _rockPrefab: {fileID: 7982885264410136940, guid: e68aa4d7aa5c66d4cb97c488c04dae65,
     type: 3}
-  mainPrefab: {fileID: 8842900549859255135, guid: 8791fca211424814180c74787af5e6e1,
+  _mainPrefab: {fileID: 8842900549859255135, guid: 8791fca211424814180c74787af5e6e1,
     type: 3}
-  hand: {fileID: 1940428469}
+  _hand: {fileID: 1940428469}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1976,7 +1973,7 @@ GameObject:
   - component: {fileID: 648781253}
   - component: {fileID: 648781255}
   m_Layer: 5
-  m_Name: Text (2)
+  m_Name: MainCounterShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2902,7 +2899,7 @@ GameObject:
   - component: {fileID: 861856159}
   - component: {fileID: 861856158}
   m_Layer: 5
-  m_Name: Text
+  m_Name: MainCounterText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

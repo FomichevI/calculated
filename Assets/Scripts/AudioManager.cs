@@ -1,58 +1,54 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager _audioManager;
-    public AudioClip[] audioClips;
+    public static AudioManager S;
+    [SerializeField] private AudioClip _clickAc;
+    [SerializeField] private AudioClip _connectAc;
+    [SerializeField] private AudioClip _correctAc;
+    [SerializeField] private AudioClip _incorrectAc;
 
-    public AudioSource musicAS;
-    public AudioSource clickAS;
+    [SerializeField] private AudioSource _musicAS;
+    [SerializeField] private AudioSource _clickAS;
 
-
-    /// Нумерация звуков:
-    /// 0 - кнопка
-    /// 1 - соединение клеток
-    /// 2 - верно
-    /// 3 - неверно
     private void Start()
     {
-        _audioManager = this;
+        S = this;
         DontDestroyOnLoad(gameObject);
 
-        if (Camera.main.GetComponent<SaveController>().GetVolumeOn() == 0)
-            clickAS.volume = 0;
+        if (SaveController.S.GetVolumeOn() == 0)
+            _clickAS.volume = 0;
         else
-            clickAS.volume = Camera.main.GetComponent<SaveController>().GetVolume();
-        if (Camera.main.GetComponent<SaveController>().GetMusicOn() == 0)
-            musicAS.volume = 0;
+            _clickAS.volume = SaveController.S.GetVolume();
+        if (SaveController.S.GetMusicOn() == 0)
+            _musicAS.volume = 0;
         else
-            musicAS.volume = Camera.main.GetComponent<SaveController>().GetMusic(); // ****************************************
+            _musicAS.volume = SaveController.S.GetMusic();
     }
 
     public void SetVolume(float volume)
     {
-        clickAS.volume = volume;
+        _clickAS.volume = volume;
     }
     public void SetMusicVolume(float volume)
     {
-        musicAS.volume = volume;
+        _musicAS.volume = volume;
     }
 
     public void PlayClick()
     {
-        clickAS.PlayOneShot(audioClips[0]);
+        _clickAS.PlayOneShot(_clickAc);
     }
     public void PlayConnection()
     {
-        clickAS.PlayOneShot(audioClips[1]);
+        _clickAS.PlayOneShot(_connectAc);
     }
     public void PlayCorrect()
     {
-        clickAS.PlayOneShot(audioClips[2]);
+        _clickAS.PlayOneShot(_correctAc);
     }
     public void PlayIncorrect()
     {
-        clickAS.PlayOneShot(audioClips[3]);
+        _clickAS.PlayOneShot(_incorrectAc);
     }
 }

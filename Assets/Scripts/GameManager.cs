@@ -1,112 +1,104 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Xml;
 
+[RequireComponent(typeof(LevelInterface))]
 public class GameManager : MonoBehaviour
 {
-    public bool isPlaying = true;
-    public int currentLvl;
+    public bool IsPlaying = true;
+    private int _currentLvl; public int CurrentLvl { get { return _currentLvl; } }
 
-    public Text mainCounterText;
-    public Text supportCounterText;
-    public Canvas canvas;
-    public Transform bGTrans;
-    public Animator counterAnimator;
+    [SerializeField] private Text _mainCounterText;
+    [SerializeField] private Text _supportCounterText;
+    [SerializeField] private Transform _panelTrans;
 
-    public GameObject startPrefab;
-    public GameObject finishPrefab;
-    public GameObject rockPrefab;
-    public GameObject mainPrefab;
+    [SerializeField] private GameObject _startPrefab;
+    [SerializeField] private GameObject _finishPrefab;
+    [SerializeField] private GameObject _rockPrefab;
+    [SerializeField] private GameObject _mainPrefab;
 
-    public GameObject hand;
+    [SerializeField] private GameObject _hand;
 
-    private Square currentSqare;
+    private Animator _counterAnimator;
+    private Square _currentSqare;
     // столбец и строка текущего элемента в массиве
-    private int currentColumn;
-    private int currentLine;
+    private int _currentColumn;
+    private int _currentLine;
 
-    private Finish finishSqare;
-    private Square lastSqare;
-    private Square startSqare;
-    private Square[,] squaresMat;
+    private Finish _finishSqare;
+    private Square _startSqare;
+    private Square[,] _allSquares; //двумерный массив всех Square
+    private Square _lastSqare; //элемент последнего совершенного хода
 
-    private List<Square> possibleMoves;
-    private List<Square> commitMoves;
-    private List<string> correctPath; //список координат клеток
+    private List<Square> _possibleMoves; //список возможных ходов
+    private List<Square> _commitedMoves; //список совершенных ходов
+    private List<string> _correctPath; //список координат клеток
 
-    private int currentHint = 0;
-    private Square lastHintSquare;
+    private int _currentHint = 0;
+    private Square _lastHintSquare;
 
-    private int count;
-
-    private bool isComplited;    
+    private int _count; //общий счет очков
+    private bool _isComplited;
 
     void Start()
     {
         //загрузка текущего уровня из файла сохранения
-        currentLvl = GetComponent<SaveController>().GetCurrentLevel();
+        _currentLvl = SaveController.S.GetCurrentLevel();
 
-        squaresMat = new Square[3, 5];
+        _allSquares = new Square[3, 5];
+        _commitedMoves = new List<Square>();
+        _possibleMoves = new List<Square>();
+        _correctPath = new List<string>();
+        _counterAnimator = _supportCounterText.GetComponent<Animator>();
 
-        commitMoves = new List<Square>();
-        possibleMoves = new List<Square>();
-        correctPath = new List<string>();
-
-        counterAnimator = supportCounterText.GetComponent<Animator>();
-
-        LoadLevel(currentLvl);
-        if (currentLvl == 1) //показываем подсказку только на первом уровне
+        LoadLevel(_currentLvl);
+        if (_currentLvl == 1) //показываем подсказку только на первом уровне
         {
-            hand.SetActive(true);
-            isPlaying = false;
+            _hand.SetActive(true);
+            IsPlaying = false;
             Invoke("ContinuePlay", 2.3f);
         }
     }
-
     private void ContinuePlay()
     {
         if (!GetComponent<LevelInterface>().PanelsIsActive) //если на данный момент нет активных панелей, перекрывающих уровень
-            isPlaying = true;
+            IsPlaying = true;
     }
-
-    private void SetPossibleMoves()
+    private void SetPossibleMoves() //метод, определяющий и устанавливающий все возможные направления ходов на данный момент
     {
-        possibleMoves.Clear();    
-        
-            for (int i = 0; i < 3; i++)
+        _possibleMoves.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 5; j++)
             {
-                for (int j = 0; j < 5; j++)
+                if (_allSquares[i, j] == _currentSqare)
                 {
-                    if (squaresMat[i, j] == currentSqare)
-                    {
-                        currentColumn = i;
-                        currentLine = j;
-                        break;
-                    }
+                    _currentColumn = i;
+                    _currentLine = j;
+                    break;
                 }
             }
+        }
 
-        if (currentColumn != 0 && squaresMat[currentColumn - 1, currentLine] != null
-            && !commitMoves.Contains(squaresMat[currentColumn - 1, currentLine]))
-            possibleMoves.Add(squaresMat[currentColumn - 1, currentLine]);
-        if (currentColumn != 2 && squaresMat[currentColumn + 1, currentLine] != null
-            && !commitMoves.Contains(squaresMat[currentColumn + 1, currentLine]))
-            possibleMoves.Add(squaresMat[currentColumn + 1, currentLine]);
-        if (currentLine != 0 && squaresMat[currentColumn, currentLine - 1] != null
-            && !commitMoves.Contains(squaresMat[currentColumn, currentLine - 1]))
-            possibleMoves.Add(squaresMat[currentColumn, currentLine - 1]);
-        if (currentLine !=4 && squaresMat[currentColumn, currentLine + 1] != null
-            && !commitMoves.Contains(squaresMat[currentColumn, currentLine + 1]))
-            possibleMoves.Add(squaresMat[currentColumn, currentLine + 1]);
+        if (_currentColumn != 0 && _allSquares[_currentColumn - 1, _currentLine] != null
+            && !_commitedMoves.Contains(_allSquares[_currentColumn - 1, _currentLine]))
+            _possibleMoves.Add(_allSquares[_currentColumn - 1, _currentLine]);
+        if (_currentColumn != 2 && _allSquares[_currentColumn + 1, _currentLine] != null
+            && !_commitedMoves.Contains(_allSquares[_currentColumn + 1, _currentLine]))
+            _possibleMoves.Add(_allSquares[_currentColumn + 1, _currentLine]);
+        if (_currentLine != 0 && _allSquares[_currentColumn, _currentLine - 1] != null
+            && !_commitedMoves.Contains(_allSquares[_currentColumn, _currentLine - 1]))
+            _possibleMoves.Add(_allSquares[_currentColumn, _currentLine - 1]);
+        if (_currentLine != 4 && _allSquares[_currentColumn, _currentLine + 1] != null
+            && !_commitedMoves.Contains(_allSquares[_currentColumn, _currentLine + 1]))
+            _possibleMoves.Add(_allSquares[_currentColumn, _currentLine + 1]);
     }
-
     private void Update()
     {
-        if(isPlaying && Input.GetMouseButton(0))
+        if (IsPlaying && Input.GetMouseButton(0))
         {
-            hand.SetActive(false);
+            _hand.SetActive(false);
             Vector3 p;
             if (Input.GetKey(KeyCode.Mouse0))
                 p = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -119,150 +111,146 @@ public class GameManager : MonoBehaviour
             {
                 if (hit2D.collider.gameObject.tag == "Square")
                 {
-                    if (possibleMoves.Contains(hit2D.collider.GetComponent<Square>()))
+                    if (_possibleMoves.Contains(hit2D.collider.GetComponent<Square>())) //если ход является допустимым
                     {
-                        if (currentSqare != null) //добавляем предыдущую ячейку к выбравнным, если она была
+                        if (_currentSqare != null) //если была выбранная предыдущая ячейка, то добавляем ее к выбранным
                         {
-                            commitMoves.Add(currentSqare);
-                            SetConnection(hit2D.collider.gameObject, false);
+                            _commitedMoves.Add(_currentSqare);
+                            ShowConnection(hit2D.collider.gameObject, false);
                         }
-                        // устанавливаем текущую ячейку
-                        currentSqare = hit2D.collider.GetComponent<Square>();
-                        currentSqare.ShowLightning();
+                        //устанавливаем текущую ячейку
+                        _currentSqare = hit2D.collider.GetComponent<Square>();
+                        _currentSqare.ShowLightning();
 
-                        count += currentSqare.value;
-                        SetCounterText();
+                        _count += _currentSqare.Value;
+                        ShowCounterText();
                         SetPossibleMoves();
 
-                        AudioManager._audioManager.PlayConnection();
+                        AudioManager.S.PlayConnection();
                     }
                     //логика для движения в обратную сторону 
-                    else if (commitMoves.Count >= 1 && commitMoves[commitMoves.Count - 1] == hit2D.collider.GetComponent<Square>())
+                    else if (_commitedMoves.Count >= 1 && _commitedMoves[_commitedMoves.Count - 1] == hit2D.collider.GetComponent<Square>())
                     {
                         Square sq = hit2D.collider.GetComponent<Square>();
-                        currentSqare.HideAllLightnings();
-                        commitMoves.Remove(sq);
+                        _currentSqare.HideAllLightnings();
+                        _commitedMoves.Remove(sq);
 
-                        count -= currentSqare.value;
-                        currentSqare = sq;
+                        _count -= _currentSqare.Value;
+                        _currentSqare = sq;
 
-                        SetCounterText();
+                        ShowCounterText();
                         SetPossibleMoves();
 
-                        AudioManager._audioManager.PlayConnection();
+                        AudioManager.S.PlayConnection();
                     }
                 }
-                else if(hit2D.collider.gameObject.tag == "Finish")
+                else if (hit2D.collider.gameObject.tag == "Finish") //если текущий ход ведет к финишу
                 {
-                    if (currentSqare != null && currentSqare == lastSqare)
+                    if (_currentSqare != null && _currentSqare == _lastSqare)
                     {
                         Finish fin = hit2D.collider.GetComponent<Finish>();
-                        if (count == fin.value)
+                        if (_count == fin.Value)
                         {
-                            isComplited = true;
+                            _isComplited = true;
                             fin.ShowCorrectLightning();
                         }
                         else
                         {
                             fin.ShowIncorrectLightning();
-                            Invoke("Refresh",0.3f);
+                            Invoke("Refresh", 0.3f);
                         }
                     }
                 }
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0)) //когда отпускаем кнопку
         {
 
-            if (currentSqare != null)
+            if (_currentSqare != null)
             {
                 Refresh();
                 //заканчиваем уровень, если мы его прошли
-                if (isComplited)
+                if (_isComplited)
                 {
                     GetComponent<LevelInterface>().ShowWinPanel();
-                    GetComponent<SaveController>().SetMaxLevel(currentLvl + 1);
-                    isComplited = false;
+                    SaveController.S.SetMaxLevel(_currentLvl + 1);
+                    _isComplited = false;
                 }
             }
         }
     }
-    private void Refresh()
+    private void Refresh() //метод для возврата значений к старту уровня
     {
-        if (currentSqare != null)
+        if (_currentSqare != null)
         {
             //снимаем все выделение
-            foreach (Square sq in commitMoves)
+            foreach (Square sq in _commitedMoves)
                 sq.HideAllLightnings();
-            currentSqare.HideAllLightnings();
-            finishSqare.HideLightning();
+            _currentSqare.HideAllLightnings();
+            _finishSqare.HideLightning();
             //очищаем все списки
-            commitMoves.Clear();
-            currentSqare = null;
-            possibleMoves.Clear();
+            _commitedMoves.Clear();
+            _currentSqare = null;
+            _possibleMoves.Clear();
             //устанавливаем возможной только клетку старта
-            possibleMoves.Add(startSqare);
+            _possibleMoves.Add(_startSqare);
             //устанавливаем счетчик в 0
-            count = 0;
-            SetCounterText();
+            _count = 0;
+            ShowCounterText();
         }
     }
-
-    private void SetCounterText()
+    private void ShowCounterText()
     {
-        mainCounterText.text = count.ToString();
-        supportCounterText.text = count.ToString();
-        counterAnimator.Play("New Animation");
+        _mainCounterText.text = _count.ToString();
+        _supportCounterText.text = _count.ToString();
+        _counterAnimator.Play("CounterAnimation");
     }
-
     public void ShowNewHint()
     {
-        if (currentHint < correctPath.Count)
+        //подсказки показываются по одному ходу за раз последовательно
+        if (_currentHint < _correctPath.Count)
         {
             //взять необходимый квадрат из матрицы
-            string[] matPos = correctPath[currentHint].Split('-');
-            Square square = squaresMat[int.Parse(matPos[0]), int.Parse(matPos[1])];
+            string[] matPos = _correctPath[_currentHint].Split('-');
+            Square square = _allSquares[int.Parse(matPos[0]), int.Parse(matPos[1])];
             //подсветить его соединение в зависимости от положения последнего квадрата
-            SetConnection(square.gameObject, true);
+            ShowConnection(square.gameObject, true);
             //сделать квадрат последним в цепочке
-            lastHintSquare = square;
-            lastHintSquare.isHind = true;
-            currentHint += 1;
-            AudioManager._audioManager.PlayCorrect();
+            _lastHintSquare = square;
+            _lastHintSquare.IsHintActive = true;
+            _currentHint += 1;
+            AudioManager.S.PlayCorrect();
         }
     }
-
-
-    private void SetConnection (GameObject newSquare, bool isHint)
+    private void ShowConnection(GameObject newSquare, bool isHint)
     {
         if (!isHint) //если мы подсвечиваем не подсказку
         {
-            if (newSquare.transform.position.y > currentSqare.transform.position.y)
-                newSquare.GetComponent<Square>().ShowConnection(eConnectionNames.down);
-            else if (newSquare.transform.position.y < currentSqare.transform.position.y)
-                newSquare.GetComponent<Square>().ShowConnection(eConnectionNames.up);
-            else if (newSquare.transform.position.x > currentSqare.transform.position.x)
-                newSquare.GetComponent<Square>().ShowConnection(eConnectionNames.left);
-            else if (newSquare.transform.position.x < currentSqare.transform.position.x)
-                newSquare.GetComponent<Square>().ShowConnection(eConnectionNames.right);
+            if (newSquare.transform.position.y > _currentSqare.transform.position.y)
+                newSquare.GetComponent<Square>().ShowConnection(ConnectionNames.down);
+            else if (newSquare.transform.position.y < _currentSqare.transform.position.y)
+                newSquare.GetComponent<Square>().ShowConnection(ConnectionNames.up);
+            else if (newSquare.transform.position.x > _currentSqare.transform.position.x)
+                newSquare.GetComponent<Square>().ShowConnection(ConnectionNames.left);
+            else if (newSquare.transform.position.x < _currentSqare.transform.position.x)
+                newSquare.GetComponent<Square>().ShowConnection(ConnectionNames.right);
         }
         else //если подсвечиваем подсказку
         {
-            if (lastHintSquare == null) //определяем предыдущий квадрат, если его нет
-                lastHintSquare = startSqare;
+            if (_lastHintSquare == null) //определяем предыдущий квадрат, если его нет
+                _lastHintSquare = _startSqare;
 
-            if (newSquare.transform.position.y > lastHintSquare.gameObject.transform.position.y)
-                newSquare.GetComponent<Square>().ShowHintConnection(eConnectionNames.down);
-            else if (newSquare.transform.position.y < lastHintSquare.gameObject.transform.position.y)
-                newSquare.GetComponent<Square>().ShowHintConnection(eConnectionNames.up);
-            else if (newSquare.transform.position.x > lastHintSquare.gameObject.transform.position.x)
-                newSquare.GetComponent<Square>().ShowHintConnection(eConnectionNames.left);
-            else if (newSquare.transform.position.x < lastHintSquare.gameObject.transform.position.x)
-                newSquare.GetComponent<Square>().ShowHintConnection(eConnectionNames.right);
+            if (newSquare.transform.position.y > _lastHintSquare.gameObject.transform.position.y)
+                newSquare.GetComponent<Square>().ShowHintConnection(ConnectionNames.down);
+            else if (newSquare.transform.position.y < _lastHintSquare.gameObject.transform.position.y)
+                newSquare.GetComponent<Square>().ShowHintConnection(ConnectionNames.up);
+            else if (newSquare.transform.position.x > _lastHintSquare.gameObject.transform.position.x)
+                newSquare.GetComponent<Square>().ShowHintConnection(ConnectionNames.left);
+            else if (newSquare.transform.position.x < _lastHintSquare.gameObject.transform.position.x)
+                newSquare.GetComponent<Square>().ShowHintConnection(ConnectionNames.right);
         }
     }
-
     private void LoadLevel(int lvl)
     {
         TextAsset levelsText = Resources.Load<TextAsset>("XML/LevelsXML");
@@ -270,68 +258,68 @@ public class GameManager : MonoBehaviour
         levelX.LoadXml(levelsText.text);
         XmlNodeList lvlNodeX = levelX.GetElementsByTagName("level_" + lvl);
         XmlNodeList squaresNodesX = lvlNodeX[0].ChildNodes;
-        foreach(XmlNode nodeX in squaresNodesX)
+        foreach (XmlNode nodeX in squaresNodesX)
         {
             if (nodeX.Attributes["type"] != null)
             {
                 if (nodeX.Attributes["type"].Value == "main")
                 {
                     //создаем объект
-                    GameObject square = Instantiate<GameObject>(mainPrefab);
-                    square.GetComponent<Square>().value = int.Parse(nodeX.Attributes["value"].Value);
+                    GameObject square = Instantiate<GameObject>(_mainPrefab);
+                    square.GetComponent<Square>().Value = int.Parse(nodeX.Attributes["value"].Value);
                     //временные данные
                     int culumn = int.Parse(nodeX.Attributes["culumn"].Value);
                     int line = int.Parse(nodeX.Attributes["line"].Value);
                     //настраиваем позицию
-                    square.transform.SetParent(bGTrans);
+                    square.transform.SetParent(_panelTrans);
                     Vector3 pos = new Vector3((-270 + culumn * 270), (360 - line * 270), 0);
                     square.transform.localScale = Vector3.one;
                     square.transform.localPosition = pos;
-                    squaresMat[culumn, line] = square.GetComponent<Square>();
+                    _allSquares[culumn, line] = square.GetComponent<Square>();
                 }
 
                 else if (nodeX.Attributes["type"].Value == "start")
                 {
                     //создаем объект
-                    GameObject square = Instantiate<GameObject>(startPrefab);
+                    GameObject square = Instantiate<GameObject>(_startPrefab);
                     //временные данные
                     int culumn = int.Parse(nodeX.Attributes["culumn"].Value);
                     int line = int.Parse(nodeX.Attributes["line"].Value);
                     //настраиваем позицию
-                    square.transform.SetParent(bGTrans);
+                    square.transform.SetParent(_panelTrans);
                     Vector3 pos = new Vector3((-270 + culumn * 270), (360 - line * 270), 0);
                     square.transform.localScale = Vector3.one;
                     square.transform.localPosition = pos;
-                    startSqare = square.GetComponent<Square>();
-                    squaresMat[culumn, line] = startSqare;
-                    possibleMoves.Add(startSqare);
+                    _startSqare = square.GetComponent<Square>();
+                    _allSquares[culumn, line] = _startSqare;
+                    _possibleMoves.Add(_startSqare);
                 }
 
                 else if (nodeX.Attributes["type"].Value == "finish")
                 {
                     //создаем объект
-                    GameObject square = Instantiate<GameObject>(finishPrefab);
+                    GameObject square = Instantiate<GameObject>(_finishPrefab);
                     //временные данные
                     int culumn = int.Parse(nodeX.Attributes["culumn"].Value);
                     //настраиваем позицию
-                    square.transform.SetParent(bGTrans);
+                    square.transform.SetParent(_panelTrans);
                     Vector3 pos = new Vector3((-270 + culumn * 270), 615, 1);
                     square.transform.localScale = Vector3.one;
                     square.transform.localPosition = pos;
-                    finishSqare = square.GetComponent<Finish>();
-                    finishSqare.value = int.Parse(nodeX.Attributes["value"].Value);
-                    lastSqare = squaresMat[culumn, 0];
+                    _finishSqare = square.GetComponent<Finish>();
+                    _finishSqare.Value = int.Parse(nodeX.Attributes["value"].Value);
+                    _lastSqare = _allSquares[culumn, 0];
                 }
 
                 else if (nodeX.Attributes["type"].Value == "rock")
                 {
                     //создаем объект
-                    GameObject square = Instantiate<GameObject>(rockPrefab);
+                    GameObject square = Instantiate<GameObject>(_rockPrefab);
                     //временные данные
                     int culumn = int.Parse(nodeX.Attributes["culumn"].Value);
                     int line = int.Parse(nodeX.Attributes["line"].Value);
                     //настраиваем позицию
-                    square.transform.SetParent(bGTrans);
+                    square.transform.SetParent(_panelTrans);
                     Vector3 pos = new Vector3((-270 + culumn * 270), (360 - line * 270), 0);
                     square.transform.localScale = Vector3.one;
                     square.transform.localPosition = pos;
@@ -341,9 +329,8 @@ public class GameManager : MonoBehaviour
             {
                 string[] path = nodeX.Attributes["path"].Value.Split(' ');
                 foreach (string i in path)
-                    correctPath.Add(i);                
+                    _correctPath.Add(i);
             }
         }
     }
-
 }

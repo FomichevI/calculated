@@ -2,57 +2,56 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum eConnectionNames {up, down, right, left}
-
+public enum ConnectionNames { up, down, right, left }
 
 public class Square : MonoBehaviour
 {
-    public int value = 0; // значение 0 для клетки старта 
-    public bool isHind;
+    [HideInInspector] public int Value = 0; // значение 0 для клетки старта 
+    [HideInInspector] public bool IsHintActive;
 
-    public GameObject lightning;
-    public GameObject upConnection;
-    public GameObject downConnection;
-    public GameObject leftConnection;
-    public GameObject rightConnection;
+    [SerializeField] private GameObject _lightning;
+    [SerializeField] private GameObject _upConnection;
+    [SerializeField] private GameObject _downConnection;
+    [SerializeField] private GameObject _leftConnection;
+    [SerializeField] private GameObject _rightConnection;
 
-    public GameObject redPS;
-    public GameObject greenPS;
-    public GameObject yellowPS;
+    [SerializeField] private GameObject _redPS;
+    [SerializeField] private GameObject _greenPS;
+    [SerializeField] private GameObject _yellowPS;
 
-    public Image colorCenterImg;
-    public Text mainText;
-    public Text supportText;
+    [SerializeField] private Image _colorCenterImg;
+    [SerializeField] private Text _mainText;
+    [SerializeField] private Text _supportText;
 
-    private Color plusSquereCol;
-    private Color minusSquereCol;
-    private Color startSquereCol;
+    private Color _plusSquereCol;
+    private Color _minusSquereCol;
+    private Color _startSquereCol;
 
-    private Color mainConnectionCol;
-    private Color hintConnectionCol;
-    private eConnectionNames fixedConnection;
+    private Color _mainConnectionCol;
+    private Color _hintConnectionCol;
+    private ConnectionNames _fixedConnection;
 
     void Start()
     {
-        plusSquereCol = new Color(21/255f, 224/255f, 7/255f);
-        minusSquereCol = new Color(224/255f, 39/255f, 7/255f);
-        startSquereCol = new Color(1, 197 / 255f, 0);
+        _plusSquereCol = new Color(21 / 255f, 224 / 255f, 7 / 255f);
+        _minusSquereCol = new Color(224 / 255f, 39 / 255f, 7 / 255f);
+        _startSquereCol = new Color(1, 197 / 255f, 0);
 
-        mainConnectionCol = new Color(1, 220 / 255f, 0);
-        hintConnectionCol = new Color(21 / 255f, 224 / 255f, 7 / 255f);
+        _mainConnectionCol = new Color(1, 220 / 255f, 0);
+        _hintConnectionCol = new Color(21 / 255f, 224 / 255f, 7 / 255f);
 
-        // устанавливаем цвет квадрата и текст
-        if (value > 0)
+        //устанавливаем цвет квадрата и текст
+        if (Value > 0)
         {
             SetCenterColor("plus");
-            mainText.text = "+" + value;
-            supportText.text = "+" + value;
+            _mainText.text = "+" + Value;
+            _supportText.text = "+" + Value;
         }
-        else if (value < 0)
+        else if (Value < 0)
         {
             SetCenterColor("minus");
-            mainText.text = value.ToString();
-            supportText.text = value.ToString();
+            _mainText.text = Value.ToString();
+            _supportText.text = Value.ToString();
         }
         else
             SetCenterColor("start");
@@ -60,59 +59,59 @@ public class Square : MonoBehaviour
 
     public void ShowLightning()
     {
-        lightning.SetActive(true);
+        _lightning.SetActive(true);
 
-        if (value > 0)
-            greenPS.SetActive(true);
-        else if (value < 0)
-            redPS.SetActive(true);
+        if (Value > 0)
+            _greenPS.SetActive(true);
+        else if (Value < 0)
+            _redPS.SetActive(true);
         else
-            yellowPS.SetActive(true);
+            _yellowPS.SetActive(true);
     }
 
-    public void ShowConnection(eConnectionNames name)
+    public void ShowConnection(ConnectionNames name)
     {
         switch (name)
         {
-            case eConnectionNames.up:
-                upConnection.SetActive(true);
-                upConnection.GetComponent<Image>().color = mainConnectionCol;
+            case ConnectionNames.up:
+                _upConnection.SetActive(true);
+                _upConnection.GetComponent<Image>().color = _mainConnectionCol;
                 break;
-            case eConnectionNames.down:
-                downConnection.SetActive(true);
-                downConnection.GetComponent<Image>().color = mainConnectionCol;
+            case ConnectionNames.down:
+                _downConnection.SetActive(true);
+                _downConnection.GetComponent<Image>().color = _mainConnectionCol;
                 break;
-            case eConnectionNames.left:
-                leftConnection.SetActive(true);
-                leftConnection.GetComponent<Image>().color = mainConnectionCol;
+            case ConnectionNames.left:
+                _leftConnection.SetActive(true);
+                _leftConnection.GetComponent<Image>().color = _mainConnectionCol;
                 break;
-            case eConnectionNames.right:
-                rightConnection.SetActive(true);
-                rightConnection.GetComponent<Image>().color = mainConnectionCol;
+            case ConnectionNames.right:
+                _rightConnection.SetActive(true);
+                _rightConnection.GetComponent<Image>().color = _mainConnectionCol;
                 break;
         }
     }
 
-    public void ShowHintConnection(eConnectionNames name)
+    public void ShowHintConnection(ConnectionNames name)
     {
-        fixedConnection = name;
+        _fixedConnection = name;
         switch (name)
         {
-            case eConnectionNames.up:
-                upConnection.SetActive(true);
-                upConnection.GetComponent<Image>().color = hintConnectionCol;
+            case ConnectionNames.up:
+                _upConnection.SetActive(true);
+                _upConnection.GetComponent<Image>().color = _hintConnectionCol;
                 break;
-            case eConnectionNames.down:
-                downConnection.SetActive(true);
-                downConnection.GetComponent<Image>().color = hintConnectionCol;
+            case ConnectionNames.down:
+                _downConnection.SetActive(true);
+                _downConnection.GetComponent<Image>().color = _hintConnectionCol;
                 break;
-            case eConnectionNames.left:
-                leftConnection.SetActive(true);
-                leftConnection.GetComponent<Image>().color = hintConnectionCol;
+            case ConnectionNames.left:
+                _leftConnection.SetActive(true);
+                _leftConnection.GetComponent<Image>().color = _hintConnectionCol;
                 break;
-            case eConnectionNames.right:
-                rightConnection.SetActive(true);
-                rightConnection.GetComponent<Image>().color = hintConnectionCol;
+            case ConnectionNames.right:
+                _rightConnection.SetActive(true);
+                _rightConnection.GetComponent<Image>().color = _hintConnectionCol;
                 break;
         }
     }
@@ -122,35 +121,34 @@ public class Square : MonoBehaviour
         switch (squareType)
         {
             case "plus":
-                colorCenterImg.color = plusSquereCol;
+                _colorCenterImg.color = _plusSquereCol;
                 break;
             case "minus":
-                colorCenterImg.color = minusSquereCol;
+                _colorCenterImg.color = _minusSquereCol;
                 break;
             case "start":
-                colorCenterImg.color = startSquereCol;
+                _colorCenterImg.color = _startSquereCol;
                 break;
         }
     }
 
-    public void HideAllLightnings() //скрываем все связи, если квадрат не является подсказкой
+    public void HideAllLightnings() //скрываем все связи, если квадрат не активирован как подсказка
     {
-        lightning.SetActive(false);
+        _lightning.SetActive(false);
 
-        if (value > 0)
-            greenPS.SetActive(false);
-        else if (value < 0)
-            redPS.SetActive(false);
+        if (Value > 0)
+            _greenPS.SetActive(false);
+        else if (Value < 0)
+            _redPS.SetActive(false);
         else
-            yellowPS.SetActive(false);
+            _yellowPS.SetActive(false);
 
-        upConnection.SetActive(false);
-        downConnection.SetActive(false);
-        leftConnection.SetActive(false);
-        rightConnection.SetActive(false);
+        _upConnection.SetActive(false);
+        _downConnection.SetActive(false);
+        _leftConnection.SetActive(false);
+        _rightConnection.SetActive(false);
 
-        if (isHind)
-            ShowHintConnection(fixedConnection);        
+        if (IsHintActive)
+            ShowHintConnection(_fixedConnection);
     }
-
 }

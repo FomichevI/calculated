@@ -1,32 +1,28 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LevelButton : MonoBehaviour
 {
-    public int value;
-
-    public Text mainText;
-    public Text addedText;
-
-    public Image centerImg;
+    private int _value;
+    [SerializeField] private Text _mainText;
+    [SerializeField] private Text _addedText;
+    [SerializeField] private Image _centerImg;
 
     public void SetValue(int num)
     {
-        value = num;
-        mainText.text = value.ToString();
-        addedText.text = value.ToString();
+        _value = num;
+        _mainText.text = _value.ToString();
+        _addedText.text = _value.ToString();
     }
     public void SetImageColor(Color color)
     {
-        centerImg.color = color;
+        _centerImg.color = color;
     }
     public void StartLevel()
     {
-        AudioManager._audioManager.PlayClick();
-        Camera.main.GetComponent<SaveController>().SetCurrentLevel(value);
+        AudioManager.S.PlayClick();
+        Camera.main.GetComponent<SaveController>().SetCurrentLevel(_value);
         SceneManager.LoadScene(1);
     }
-
 }

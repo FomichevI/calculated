@@ -4,8 +4,8 @@ using UnityEngine.Networking;
 
 public class Updater : MonoBehaviour
 {
-    private float currentBundleVersion;
-    private float actualBungleVersion;
+    private float _currentBundleVersion;
+    private float _actualBungleVersion;
 
     private void Start()
     {
@@ -26,13 +26,12 @@ public class Updater : MonoBehaviour
         }
         else
         {
-            //Debug.Log(www.downloadHandler.text);
             string response = www.downloadHandler.text;
             string t = System.Text.RegularExpressions.Regex.Match(response, @"<span class=""htlgb"">[0-9]+\.[0-9]").Groups[0].Value;
             string[] values = t.Split('>');
 
-            actualBungleVersion = float.Parse(values[1], System.Globalization.CultureInfo.InvariantCulture);
-            if(currentBundleVersion< actualBungleVersion)
+            _actualBungleVersion = float.Parse(values[1], System.Globalization.CultureInfo.InvariantCulture);
+            if (_currentBundleVersion < _actualBungleVersion)
             {
                 GetComponent<MenuInterface>().ShowUpdatePanel();
             }

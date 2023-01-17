@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public enum eThemeType { black, blue, white }
 
@@ -49,7 +48,7 @@ public class MenuInterface : MonoBehaviour
     public void ShowSettings()
     {
         _settingsPanel.SetActive(true);
-        AudioManager._audioManager.PlayClick();
+        AudioManager.S.PlayClick();
         LanguageManager.S.RefreshAllTexts();
     }
     public void ShowUpdatePanel()
@@ -60,12 +59,12 @@ public class MenuInterface : MonoBehaviour
     public void HideSettings()
     {
         _settingsPanel.SetActive(false);
-        AudioManager._audioManager.PlayClick();
+        AudioManager.S.PlayClick();
     }
     public void HideUpdatePanel()
     {
         _updatePanel.SetActive(false);
-        AudioManager._audioManager.PlayClick();
+        AudioManager.S.PlayClick();
     }
 
     public void SwitchSound()
@@ -75,8 +74,8 @@ public class MenuInterface : MonoBehaviour
             _soundOnImage.SetActive(false);
             _soundOffImage.SetActive(true);
             _soundOn = false;
-            GetComponent<SaveController>().SetVolumeOn(0);
-            AudioManager._audioManager.SetVolume(0);
+            SaveController.S.SetVolumeOn(0);
+            AudioManager.S.SetVolume(0);
             _volumeSlider.value = 0;
         }
         else
@@ -84,8 +83,8 @@ public class MenuInterface : MonoBehaviour
             _soundOnImage.SetActive(true);
             _soundOffImage.SetActive(false);
             _soundOn = true;
-            GetComponent<SaveController>().SetVolumeOn(1);
-            AudioManager._audioManager.SetVolume(_soundVolume);
+            SaveController.S.SetVolumeOn(1);
+            AudioManager.S.SetVolume(_soundVolume);
             _volumeSlider.value = _soundVolume;
         }
     }
@@ -96,8 +95,8 @@ public class MenuInterface : MonoBehaviour
             _musicOnImage.SetActive(false);
             _musicOffImage.SetActive(true);
             _musicOn = false;
-            GetComponent<SaveController>().SetMusicOn(0);
-            AudioManager._audioManager.SetMusicVolume(0);
+            SaveController.S.SetMusicOn(0);
+            AudioManager.S.SetMusicVolume(0);
             _musicSlider.value = 0;
         }
         else
@@ -105,17 +104,17 @@ public class MenuInterface : MonoBehaviour
             _musicOnImage.SetActive(true);
             _musicOffImage.SetActive(false);
             _musicOn = true;
-            GetComponent<SaveController>().SetMusicOn(1);
-            AudioManager._audioManager.SetMusicVolume(_musicVolume);
+            SaveController.S.SetMusicOn(1);
+            AudioManager.S.SetMusicVolume(_musicVolume);
             _musicSlider.value = _musicVolume;
         }
     }
     public void ChangeTheme(int type)
     {
         SetThemeButton(type);
-        GetComponent<SaveController>().SetTheme(type);
+        SaveController.S.SetTheme(type);
         GetComponent<ThemeChanger>().SetTheme(type);
-        AudioManager._audioManager.PlayClick();
+        AudioManager.S.PlayClick();
     }
     private void SetThemeButton(int theme)
     {
@@ -155,7 +154,7 @@ public class MenuInterface : MonoBehaviour
             {
                 _soundVolume = val;
                 GetComponent<SaveController>().SetVolume(val);
-                AudioManager._audioManager.SetVolume(val);
+                AudioManager.S.SetVolume(val);
             }
         }
     }
@@ -169,14 +168,14 @@ public class MenuInterface : MonoBehaviour
             else if (!_musicOn && val != 0) //если звук выключен, а мы его включаем
             {
                 _musicVolume = val;
-                GetComponent<SaveController>().SetMusic(val);
+                SaveController.S.SetMusic(val);
                 SwitchMusic();
             }
             else //если звук включен и мы его меняем
             {
                 _musicVolume = val;
-                GetComponent<SaveController>().SetMusic(val);
-                AudioManager._audioManager.SetMusicVolume(val);
+                SaveController.S.SetMusic(val);
+                AudioManager.S.SetMusicVolume(val);
             }
         }
     }
@@ -197,6 +196,6 @@ public class MenuInterface : MonoBehaviour
             _englishLangFrame.SetActive(true);
             _russianLangFrame.SetActive(false);
         }
-        GetComponent<SaveController>().SetLanguade(lang);
-    }    
+        SaveController.S.SetLanguade(lang);
+    }
 }

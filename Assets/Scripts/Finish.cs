@@ -1,66 +1,61 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Finish : MonoBehaviour
 {
-    public int value;
+    [HideInInspector] public int Value;
+    [SerializeField] private GameObject _lightning;
+    [SerializeField] private GameObject _downConnection;
+    [SerializeField] private Image _innerSquareImg;
+    [SerializeField] private GameObject _sparksPS;
+    [SerializeField] private Text _mainText;
+    [SerializeField] private Text _supportText;
 
-    public GameObject lightning;
-    public GameObject downConnection;
-    public Image innerSquareImg;
+    private Color _greenCol;
+    private Color _redCol;
 
-    public GameObject sparksPS;
-
-    public Text mainText;
-    public Text supportText;
-
-    private Color greenCol;
-    private Color redCol;
-
-    private bool isLightning;
+    private bool _isHighlighted;
 
     private void Start()
     {
-        greenCol = new Color(21 / 255f, 224 / 255f, 7 / 255f);
-        redCol = new Color(224 / 255f, 39 / 255f, 7 / 255f);
-        innerSquareImg.color = Color.clear;
-        mainText.text = value.ToString();
-        supportText.text = value.ToString();
+        _greenCol = new Color(21 / 255f, 224 / 255f, 7 / 255f);
+        _redCol = new Color(224 / 255f, 39 / 255f, 7 / 255f);
+        _innerSquareImg.color = Color.clear;
+        _mainText.text = Value.ToString();
+        _supportText.text = Value.ToString();
     }
 
     public void ShowCorrectLightning()
     {
-        if (!isLightning)
+        if (!_isHighlighted)
         {
-            isLightning = true;
-            innerSquareImg.color = greenCol;
-            downConnection.SetActive(true);
-            lightning.SetActive(true);
-            sparksPS.SetActive(true);
-            AudioManager._audioManager.PlayCorrect();
+            _isHighlighted = true;
+            _innerSquareImg.color = _greenCol;
+            _downConnection.SetActive(true);
+            _lightning.SetActive(true);
+            _sparksPS.SetActive(true);
+            AudioManager.S.PlayCorrect();
         }
     }
 
     public void ShowIncorrectLightning()
     {
-        if (!isLightning)
+        if (!_isHighlighted)
         {
-            isLightning = true;
-            innerSquareImg.color = redCol;
-            downConnection.SetActive(true);
-            lightning.SetActive(true);
-            AudioManager._audioManager.PlayIncorrect();
+            _isHighlighted = true;
+            _innerSquareImg.color = _redCol;
+            _downConnection.SetActive(true);
+            _lightning.SetActive(true);
+            AudioManager.S.PlayIncorrect();
         }
     }
 
     public void HideLightning()
     {
-        isLightning = false;
-        innerSquareImg.color = Color.clear;
-        downConnection.SetActive(false);
-        lightning.SetActive(false);
-        sparksPS.SetActive(false);
+        _isHighlighted = false;
+        _innerSquareImg.color = Color.clear;
+        _downConnection.SetActive(false);
+        _lightning.SetActive(false);
+        _sparksPS.SetActive(false);
     }
-
 }

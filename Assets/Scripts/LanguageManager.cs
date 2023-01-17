@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Xml;
-using System.IO;
 
 public class LanguageManager : MonoBehaviour
 {

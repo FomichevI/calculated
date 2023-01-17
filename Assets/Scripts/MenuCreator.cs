@@ -21,7 +21,7 @@ public class MenuCreator : MonoBehaviour
         //меняем значение на большой кнопке с текущим уровнем
         _currentLevelBut.SetValue(maxCompleteLevel);
 
-        for (int i = 1; i<100; i++) //создаем список всех уровней
+        for (int i = 1; i < 100; i++) //создаем список всех уровней
         {
             //создать кнопку
             GameObject button = Instantiate<GameObject>(_levelButtonPrefab);
@@ -31,8 +31,8 @@ public class MenuCreator : MonoBehaviour
             //изменить ее порядковый номер
             levelButton.SetValue(i);
             //изменить цвет и активность в зависимости от порядкового номера 
-            if (i < maxCompleteLevel)            
-                levelButton.SetImageColor(_greenCol);            
+            if (i < maxCompleteLevel)
+                levelButton.SetImageColor(_greenCol);
             else if (i == maxCompleteLevel)
                 levelButton.SetImageColor(_yellowCol);
             else
